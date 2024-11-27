@@ -1,0 +1,29 @@
+networks:
+  news:
+    name: news
+    external: true
+
+services:
+  php:
+    container_name: news-php
+    build:
+      target: php
+      context: .
+    env_file:
+      - .env
+    networks:
+      - news
+    restart: unless-stopped
+
+  caddy:
+    container_name: caddy
+    build:
+      target: caddy
+      context: .
+    depends_on:
+      - php
+    ports:
+      - "8955:80"
+    networks:
+      - news
+    restart: unless-stopped

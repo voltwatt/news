@@ -1,0 +1,21 @@
+networks:
+  news:
+    name: news
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: news
+      MYSQL_USER: news
+      MYSQL_PASSWORD: news
+    volumes:
+      - /opt/docker/news/mysql:/var/lib/mysql:delegated
+    networks:
+      - news
+    ports:
+      - "3328:3306"
+    restart: unless-stopped

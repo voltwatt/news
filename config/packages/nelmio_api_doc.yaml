@@ -1,0 +1,74 @@
+nelmio_api_doc:
+    models:
+        use_jms: false
+    documentation:
+        info:
+            title: NEWS API
+            description: This is an awesome app!
+            version: 1.0.0
+        components:
+            securitySchemes:
+                bearerAuth:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+                locale:
+                    type: apiKey
+                    in: header
+                    name: App-Locale
+            schemas:
+                TokenDTO:
+                    type: object
+                    properties:
+                        token:
+                            type: string
+                            example: eyJ0e.....MampjZlOjc
+                        refreshToken:
+                            type: string
+                            example: fe837e130.....6ce7e54466400e6
+        security:
+            - bearerAuth: [ ]
+            - locale: [ ]
+        paths:
+            '/api/login':
+                post:
+                    tags:
+                        - Auth
+                    summary: 'Login a user'
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        email:
+                                            type: string
+                                            example: user@example.com
+                                        password:
+                                            type: string
+                                            example: 12345_Aa
+                    responses:
+                        '200':
+                            description: OK
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/TokenDTO'
+                        '400':
+                            description: Bad Request
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            code:
+                                                type: integer
+                                                example: 400
+                                            message:
+                                                type: string
+                                                example: Invalid credentials
+    areas: # to filter documented areas
+        default:
+            disable_default_routes: true
+            path_patterns:
+                - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
